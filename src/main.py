@@ -9,12 +9,15 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
 
+#set size of screen
+SS = (800, 600)
+
+
 class Player():
     def __init__(self, x, y, color = RED):
         self.x = x
         self.y = y
         self.color = color
-
 
     @property
     def x(self):
@@ -47,7 +50,7 @@ class Player():
         self.__color = val
 
     @property
-    def size(self):
+    def radius(self):
         return 40
 
     @property
@@ -59,8 +62,6 @@ class Player():
         return (self.x, self.y)
 
 
-#set size of screen
-SS = (800, 600)
 GameDisplay = pygame.display.set_mode(SS)
 running = True
 
@@ -84,17 +85,17 @@ while running:
     #get keys pressed
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_w]:
+    if keys[pygame.K_w] and player.y - player.radius > 0:
         player.y -= player.velocity
-    if keys[pygame.K_s]:
+    if keys[pygame.K_s] and player.y + player.radius < SS[1]:
         player.y += player.velocity
-    if keys[pygame.K_a]:
+    if keys[pygame.K_a] and player.x - player.radius > 0:
         player.x -= player.velocity
-    if keys[pygame.K_d]:
+    if keys[pygame.K_d] and player.x + player.radius < SS[0]:
         player.x += player.velocity
 
     GameDisplay.fill(BLACK)
-    pygame.draw.circle(GameDisplay, player.color, player.pos, player.size, 0)
+    pygame.draw.circle(GameDisplay, player.color, player.pos, player.radius, 0)
         
 
     pygame.display.update()
