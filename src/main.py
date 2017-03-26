@@ -6,17 +6,18 @@ from game_objects import *
 #initialize pygame
 pygame.init()
 
+#set the title of the screen
+pygame.display.set_caption('Vipy')
+
 #set size of screen
 SS = (800, 600)
 
 GameDisplay = pygame.display.set_mode(SS)
 running = True
+entities = []
 
-
-player = Entity(SS[0]//2, SS[1]//2, radius=40, color=RED)
-
-#set the title of the screen
-pygame.display.set_caption('Vipy')
+player = Player((SS[0]//2, SS[1]//2), radius=40, max_speed=5)
+entities.append(player)
 
 clock = pygame.time.Clock()
 
@@ -31,21 +32,44 @@ while running:
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_w] and player.y - player.radius > 0:
-        player.y -= player.speed
-    if keys[pygame.K_s] and player.y + player.radius < SS[1]:
-        player.y += player.speed
+        player.vely = -player.max_speed
+    elif keys[pygame.K_s] and player.y + player.radius < SS[1]:
+        player.vely = player.max_speed
+    else:
+        player.vely = 0
+    
+    if keys[pygame.K_w] and keys[pygame.K_s]:
+        player.vely = 0
+    
     if keys[pygame.K_a] and player.x - player.radius > 0:
-        player.x -= player.speed
-    if keys[pygame.K_d] and player.x + player.radius < SS[0]:
-        player.x += player.speed
+        player.velx = -player.max_speed
+    elif keys[pygame.K_d] and player.x + player.radius < SS[0]:
+        player.velx = player.max_speed
+    else:
+        player.velx = 0
+        
+    if keys[pygame.K_a] and keys[pygame.K_d]:
+        player.velx = 0
+
 
     #bullets
     if keys[pygame.K_i]:
         pass
 
+
+    #blank the screen out
     GameDisplay.fill(BLACK)
-    pygame.draw.circle(GameDisplay, player.color, player.pos, player.radius, 0)
-        
+
+    #update entities
+    for entity in entities:
+        #Update the position of the entities with their respective velocity
+        entity.x += entity.velx
+        entity.y += entity.vely
+
+        #just draw here for now
+        pygame.draw.circle(GameDisplay, entity.color, entity.pos, entity.radius, 0)
+
+
 
     pygame.display.update()
     clock.tick(60)
