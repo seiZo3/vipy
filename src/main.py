@@ -11,8 +11,8 @@ BLACK = (0, 0, 0)
 
 class Player():
     def __init__(self, x, y, color = RED):
-        self.__x = x
-        self.__y = y
+        self.x = x
+        self.y = y
         self.color = color
 
 
