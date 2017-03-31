@@ -31,6 +31,9 @@ while running:
     #get keys pressed
     keys = pygame.key.get_pressed()
 
+    #get dt
+    dt = clock.tick(60)
+
     if keys[pygame.K_w] and player.y - player.radius > 0:
         player.vely = -player.max_speed
     elif keys[pygame.K_s] and player.y + player.radius < SS[1]:
@@ -66,13 +69,17 @@ while running:
         entity.x += entity.velx
         entity.y += entity.vely
 
+        entity.update(dt)
+
         #just draw here for now
-        pygame.draw.circle(GameDisplay, entity.color, entity.pos, entity.radius, 0)
+        if entity.shape is Shape.CIRCLE:
+            pygame.draw.circle(GameDisplay, entity.color, entity.pos, entity.radius, 0)
+        elif entity.shape is Shape.TRIANGLE:
+            pass
 
 
 
     pygame.display.update()
-    clock.tick(60)
 
 pygame.quit()
 quit()

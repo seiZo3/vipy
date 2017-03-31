@@ -1,20 +1,34 @@
 #/bin/python3
 
+import abc
+from enum import Enum
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
 
 
+class Shape(Enum):
+    CIRCLE = 1
+    TRIANGLE = 2
+
+
+
 class Entity(object):
     """Base class for all game objects on screen"""
-    def __init__(self, x, y, radius=10, color=RED, max_speed=0):
+    def __init__(self, x, y, radius=10, color=RED, max_speed=0, shape=Shape.CIRCLE):
         self.x = x
         self.y = y
         self.color = color
         self.__radius = radius
         self.velx = self.vely = 0
         self.max_speed = max_speed
+        self.__shape = shape
+    
+    @abc.abstractmethod
+    def update(self, dt):
+        """Primary update method for all entities"""
+        return
 
     @property
     def x(self):
@@ -53,6 +67,10 @@ class Entity(object):
         return math.sqrt(self.velx**2 + self.vely**2)
 
     @property
+    def velocity(self):
+        return (self.velx, self.vely)
+
+    @property
     def max_speed(self):
         return self.__max_speed
 
@@ -61,6 +79,10 @@ class Entity(object):
         if val < 0:
             raise ValueError('Cannot set max_speed less than zero')
         self.__max_speed = val
+
+    @property
+    def shape(self):
+        return self.__shape
 
     @property
     def pos(self):
@@ -89,8 +111,9 @@ class Player(Entity):
         Entity.__init__(self, pos[0], pos[1],
                         radius=radius,
                         max_speed=max_speed,
-                        color=RED)
-        
+                        color=RED,
+                        shape=Shape.CIRCLE)
+
 
 class Bullet(Entity):
     """Represents a simple bullet"""
