@@ -2,6 +2,7 @@
 
 import abc
 from enum import Enum
+import math
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -12,6 +13,14 @@ class Shape(Enum):
     CIRCLE = 1
     TRIANGLE = 2
 
+
+def AngleToRadian(self, angle):
+    return angle * math.pi / 180
+
+def RotatePoint(self, point, axis, rad):
+    """Calculates the position of a single point after rotation
+    around the axis point."""
+    pass
 
 
 class Entity(object):
@@ -111,7 +120,7 @@ class Player(Entity):
         Entity.__init__(self, pos[0], pos[1],
                         radius=radius,
                         max_speed=max_speed,
-                        color=RED,
+                        color=GREEN,
                         shape=Shape.CIRCLE)
 
 
@@ -123,3 +132,5 @@ class Bullet(Entity):
 class Enemy(Entity):
     """Represents a simple enemy"""
     pass
+
+
