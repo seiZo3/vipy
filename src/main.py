@@ -20,6 +20,7 @@ entities = []
 player = Player((SS[0]//2, SS[1]//2), radius=40, max_speed=5)
 entities.append(player)
 
+
 clock = pygame.time.Clock()
 
 
@@ -36,6 +37,11 @@ def generateSpawnPos(entity, ss):
         3: (-entity.radius, vertical_edge)
     }
     return valid_pos[edge]
+
+
+enemy = Enemy(radius=4, max_speed=3)
+enemy.pos = generateSpawnPos(enemy, SS)
+entities.append(enemy)
 
 
 while running:
@@ -85,11 +91,19 @@ while running:
         entity.x += entity.velx
         entity.y += entity.vely
 
-        entity.update(dt)
+        if isinstance(entity, Enemy):
+            entity.update(dt, player.pos)
+        else:
+            entity.update(dt)
+
 
         #just draw here for now
         if entity.shape is Shape.CIRCLE:
-            pygame.draw.circle(GameDisplay, entity.color, entity.pos, entity.radius, 0)
+            pygame.draw.circle(GameDisplay,
+                               entity.color,
+                               (math.floor(entity.x), math.floor(entity.y)),
+                               entity.radius,
+                               0)
         elif entity.shape is Shape.TRIANGLE:
             pass
 

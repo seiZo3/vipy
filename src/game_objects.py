@@ -14,14 +14,22 @@ class Shape(Enum):
     TRIANGLE = 2
 
 
-def AngleToRadian(self, angle):
-    return angle * math.pi / 180
+def magnitude(v):
+    return math.sqrt(sum(v[i]*v[i] for i in range(len(v))))
 
-def RotatePoint(self, point, axis, rad):
-    """Calculates the position of a single point after rotation
-    around the axis point."""
-    pass
+def add(u, v):
+    return [ u[i]+v[i] for i in range(len(u)) ]
 
+def sub(u, v):
+    return [ u[i]-v[i] for i in range(len(u)) ]
+
+def dot(u, v):
+    return sum(u[i]*v[i] for i in range(len(u)))
+
+def normalize(v):
+    vmag = magnitude(v)
+    return [ v[i]/vmag  for i in range(len(v)) ]
+                            
 
 class Entity(object):
     """Base class for all game objects on screen"""
@@ -97,6 +105,11 @@ class Entity(object):
     def pos(self):
         return (self.x, self.y)
 
+    @pos.setter
+    def pos(self, val):
+        self.__x = val[0]
+        self.__y = val[1]
+
     @property
     def color(self):
         return self.__color
@@ -135,13 +148,20 @@ class Enemy(Entity):
     """Represents a simple enemy"""
 
     def __init__(self, radius, max_speed):
-        pos = generateSpawnPos()
-        rotation = 0.0
-        Entity.__init__(self, pos[0], pos[1],
+        Entity.__init__(self, 0, 0,
                         radius=radius,
                         max_speed=max_speed,
                         color=RED,
-                        shape=Shape.TRIANGLE)
+                        shape=Shape.CIRCLE)
+
+    def update(self, dt, player_pos):
+        direction = normalize((player_pos[0] - self.x, player_pos[1] - self.y))
+        self.velx = math.floor(self.max_speed * direction[0])
+        self.vely = math.floor(self.max_speed * direction[1])
+
+
+        
+
     
 
 
