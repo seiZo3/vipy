@@ -16,12 +16,18 @@ SS = (800, 600)
 GameDisplay = pygame.display.set_mode(SS)
 running = True
 entities = []
+enemySpawnChance = 60
+enemySpeedRange = (2, 4)
+
+SPAWN_ENEMY = pygame.USEREVENT + 1
+pygame.time.set_timer(SPAWN_ENEMY, 3000)
 
 player = Player((SS[0]//2, SS[1]//2), radius=40, max_speed=5)
 entities.append(player)
 
 
 clock = pygame.time.Clock()
+
 
 
 def generateSpawnPos(entity, ss):
@@ -39,16 +45,20 @@ def generateSpawnPos(entity, ss):
     return valid_pos[edge]
 
 
-enemy = Enemy(radius=4, max_speed=3)
-enemy.pos = generateSpawnPos(enemy, SS)
-entities.append(enemy)
-
-
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
+        elif event.type == SPAWN_ENEMY:
+            #check and see if we will spawn an enemy on this interval
+            if random.randrange(0, 100) > (100 - enemySpawnChance):
+                max_speed = random.randrange(enemySpeedRange[0],
+                                             enemySpeedRange[1])
+                enemy = Enemy(radius=30,
+                              max_speed=max_speed)
+                enemy.pos = generateSpawnPos(enemy, SS)
+                entities.append(enemy)
+                
 
     #get keys pressed
     keys = pygame.key.get_pressed()

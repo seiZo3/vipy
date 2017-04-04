@@ -158,11 +158,3 @@ class Enemy(Entity):
         direction = normalize((player_pos[0] - self.x, player_pos[1] - self.y))
         self.velx = math.floor(self.max_speed * direction[0])
         self.vely = math.floor(self.max_speed * direction[1])
-
-
-        
-
-    
-
-
-
