@@ -1,6 +1,7 @@
 #/bin/python3 
 
 import pygame
+import random
 from game_objects import *
 
 #initialize pygame
@@ -20,6 +21,21 @@ player = Player((SS[0]//2, SS[1]//2), radius=40, max_speed=5)
 entities.append(player)
 
 clock = pygame.time.Clock()
+
+
+def generateSpawnPos(entity, ss):
+    """Selects a random position at the edge of the screen for the enemey to spawn at"""
+    horizontal_edge = random.randrange(entity.radius, ss[0] - entity.radius, entity.radius*2)
+    vertical_edge = random.randrange(entity.radius, ss[1] - entity.radius, entity.radius*2)
+    edge = random.randrange(0, 4)
+
+    valid_pos = {
+        0: (horizontal_edge, -entity.radius),
+        1: (ss[0] + entity.radius, vertical_edge),
+        2: (horizontal_edge, ss[1] + entity.radius),
+        3: (-entity.radius, vertical_edge)
+    }
+    return valid_pos[edge]
 
 
 while running:
@@ -82,5 +98,3 @@ while running:
     pygame.display.update()
 
 pygame.quit()
-quit()
-        

@@ -1,7 +1,6 @@
 appdirs==1.4.3
+numpy==1.12.1
 packaging==16.8
 pygame==1.9.3
 pyparsing==2.2.0
-python-dateutil==2.6.0
-PyTMX==3.20.16
 six==1.10.0

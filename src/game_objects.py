@@ -1,4 +1,4 @@
-#/bin/python3
+#/usr/bin/python3
 
 import abc
 from enum import Enum
@@ -129,8 +129,20 @@ class Bullet(Entity):
     pass
 
 
+
+
 class Enemy(Entity):
     """Represents a simple enemy"""
-    pass
+
+    def __init__(self, radius, max_speed):
+        pos = generateSpawnPos()
+        rotation = 0.0
+        Entity.__init__(self, pos[0], pos[1],
+                        radius=radius,
+                        max_speed=max_speed,
+                        color=RED,
+                        shape=Shape.TRIANGLE)
+    
+
 
 
