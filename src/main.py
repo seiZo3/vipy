@@ -22,12 +22,11 @@ enemySpeedRange = (2, 4)
 SPAWN_ENEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(SPAWN_ENEMY, 3000)
 
-player = Player((SS[0]//2, SS[1]//2), radius=40, max_speed=5)
+player = Player((SS[0]*0.5, SS[1]*0.5), radius=40, max_speed=5)
 entities.append(player)
 
 
 clock = pygame.time.Clock()
-
 
 
 def generateSpawnPos(entity, ss):
