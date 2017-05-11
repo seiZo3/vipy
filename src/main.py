@@ -1,5 +1,3 @@
-#/bin/python3 
-
 import pygame
 import random
 from game_objects import *
@@ -7,10 +5,10 @@ from game_objects import *
 #initialize pygame
 pygame.init()
 
-#set the title of the screen
+# set the title of the screen
 pygame.display.set_caption('Vipy')
 
-#set size of screen
+# set size of screen
 SS = (800, 600)
 
 GameDisplay = pygame.display.set_mode(SS)
@@ -30,9 +28,12 @@ clock = pygame.time.Clock()
 
 
 def generateSpawnPos(entity, ss):
-    """Selects a random position at the edge of the screen for the enemey to spawn at"""
-    horizontal_edge = random.randrange(entity.radius, ss[0] - entity.radius, entity.radius*2)
-    vertical_edge = random.randrange(entity.radius, ss[1] - entity.radius, entity.radius*2)
+    """Selects a random position at the edge of the screen for the enemey
+    to spawn at"""
+    horizontal_edge = random.randrange(entity.radius, ss[0] - entity.radius,
+                                       entity.radius * 2)
+    vertical_edge = random.randrange(entity.radius, ss[1] - entity.radius,
+                                     entity.radius * 2)
     edge = random.randrange(0, 4)
 
     valid_pos = {
@@ -49,7 +50,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == SPAWN_ENEMY:
-            #check and see if we will spawn an enemy on this interval
+            # check and see if we will spawn an enemy on this interval
             if random.randrange(0, 100) > (100 - enemySpawnChance):
                 max_speed = random.randrange(enemySpeedRange[0],
                                              enemySpeedRange[1])
@@ -57,12 +58,11 @@ while running:
                               max_speed=max_speed)
                 enemy.pos = generateSpawnPos(enemy, SS)
                 entities.append(enemy)
-                
 
-    #get keys pressed
+    # get keys pressed
     keys = pygame.key.get_pressed()
 
-    #get dt
+    # get dt
     dt = clock.tick(60)
 
     if keys[pygame.K_w] and player.y - player.radius > 0:
@@ -71,32 +71,30 @@ while running:
         player.vely = player.max_speed
     else:
         player.vely = 0
-    
+
     if keys[pygame.K_w] and keys[pygame.K_s]:
         player.vely = 0
-    
+
     if keys[pygame.K_a] and player.x - player.radius > 0:
         player.velx = -player.max_speed
     elif keys[pygame.K_d] and player.x + player.radius < SS[0]:
         player.velx = player.max_speed
     else:
         player.velx = 0
-        
+
     if keys[pygame.K_a] and keys[pygame.K_d]:
         player.velx = 0
 
-
-    #bullets
+    # bullets
     if keys[pygame.K_i]:
         pass
 
-
-    #blank the screen out
+    # blank the screen out
     GameDisplay.fill(BLACK)
 
-    #update entities
+    # update entities
     for entity in entities:
-        #Update the position of the entities with their respective velocity
+        # Update the position of the entities with their respective velocity
         entity.x += entity.velx
         entity.y += entity.vely
 
@@ -105,8 +103,7 @@ while running:
         else:
             entity.update(dt)
 
-
-        #just draw here for now
+        # just draw here for now
         if entity.shape is Shape.CIRCLE:
             pygame.draw.circle(GameDisplay,
                                entity.color,
@@ -115,8 +112,6 @@ while running:
                                0)
         elif entity.shape is Shape.TRIANGLE:
             pass
-
-
 
     pygame.display.update()
 

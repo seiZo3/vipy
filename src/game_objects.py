@@ -1,5 +1,3 @@
-#/usr/bin/python3
-
 import abc
 from enum import Enum
 import math
@@ -17,25 +15,33 @@ class Shape(Enum):
 def magnitude(v):
     return math.sqrt(sum(v[i]*v[i] for i in range(len(v))))
 
+
 def add(u, v):
-    return [ u[i]+v[i] for i in range(len(u)) ]
+    return [u[i]+v[i] for i in range(len(u))]
+
 
 def sub(u, v):
-    return [ u[i]-v[i] for i in range(len(u)) ]
+    return [u[i]-v[i] for i in range(len(u))]
+
 
 def dot(u, v):
     return sum(u[i]*v[i] for i in range(len(u)))
+
 
 def normalize(v):
     vmag = magnitude(v)
     if vmag == 0.0:
         return (0.0,) * len(v)
-    return [ v[i]/vmag for i in range(len(v)) ]
-                            
+    return [v[i]/vmag for i in range(len(v))]
+
 
 class Entity(object):
     """Base class for all game objects on screen"""
-    def __init__(self, x, y, radius=10, color=RED, max_speed=0, shape=Shape.CIRCLE):
+    def __init__(self, x, y,
+                 radius=10,
+                 color=RED,
+                 max_speed=0,
+                 shape=Shape.CIRCLE):
         self.x = x
         self.y = y
         self.color = color
@@ -43,7 +49,7 @@ class Entity(object):
         self.velx = self.vely = 0
         self.max_speed = max_speed
         self.__shape = shape
-    
+
     @abc.abstractmethod
     def update(self, dt):
         """Primary update method for all entities"""
@@ -124,13 +130,10 @@ class Entity(object):
     def radius(self):
         return self.__radius
 
-    @property
-    def shape(self):
-        return self.__shape
-
 
 class Player(Entity):
-    """Represents the player, and their specific functionality outside of handling input"""
+    """Represents the player, and their specific functionality
+    outside of handling input"""
     def __init__(self, pos, radius, max_speed):
         Entity.__init__(self, pos[0], pos[1],
                         radius=radius,
@@ -142,8 +145,6 @@ class Player(Entity):
 class Bullet(Entity):
     """Represents a simple bullet"""
     pass
-
-
 
 
 class Enemy(Entity):
