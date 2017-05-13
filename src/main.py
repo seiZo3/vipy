@@ -1,8 +1,9 @@
 import pygame
 import random
+import math
 from game_objects import *
 
-#initialize pygame
+# initialize pygame
 pygame.init()
 
 # set the title of the screen
@@ -14,8 +15,27 @@ SS = (800, 600)
 GameDisplay = pygame.display.set_mode(SS)
 running = True
 entities = []
+
+# enemy constants
 enemySpawnChance = 60
 enemySpeedRange = (2, 4)
+
+# bullet constants
+bulletDir = {
+    "N": (0.0, -1.0),
+    "NE": (0.5, -0.5),
+    "E": (1.0, 0.0),
+    "SE": (0.5, 0.5),
+    "S": (0.0, 1.0),
+    "SW": (-0.5, 0.5),
+    "W": (-1.0, 0.0),
+    "NW": (-0.5, -0.5),
+    "NONE": (0, 0)
+}
+bulletDelay = 200
+bulletCounter = 0
+bulletSpeed = 15
+
 
 SPAWN_ENEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(SPAWN_ENEMY, 3000)
@@ -85,9 +105,41 @@ while running:
     if keys[pygame.K_a] and keys[pygame.K_d]:
         player.velx = 0
 
+    weaponDir = bulletDir["NONE"]
     # bullets
     if keys[pygame.K_i]:
-        pass
+        if keys[pygame.K_l]:
+            weaponDir = bulletDir["NE"]
+        elif keys[pygame.K_j]:
+            weaponDir = bulletDir["NW"]
+        else:
+            weaponDir = bulletDir["N"]
+    elif keys[pygame.K_l]:
+        if keys[pygame.K_k]:
+            weaponDir = bulletDir["SE"]
+        else:
+            weaponDir = bulletDir["E"]
+    elif keys[pygame.K_k]:
+        if keys[pygame.K_j]:
+            weaponDir = bulletDir["SW"]
+        else:
+            weaponDir = bulletDir["S"]
+    elif keys[pygame.K_j]:
+        weaponDir = bulletDir["W"]
+
+    bulletCounter += dt
+    if bulletCounter >= bulletDelay:
+        # if any of the bullet firing buttons are pressed,
+        # fire the weapon
+        bulletCounter = 0
+        if (keys[pygame.K_i] or
+            keys[pygame.K_j] or
+            keys[pygame.K_k] or
+            keys[pygame.K_l]):
+            bullet = Bullet(player.pos, bulletSpeed)
+            bullet.velx = math.floor(bulletSpeed * weaponDir[0])
+            bullet.vely = math.floor(bulletSpeed * weaponDir[1])
+            entities.append(bullet)
 
     # blank the screen out
     GameDisplay.fill(BLACK)
@@ -102,6 +154,15 @@ while running:
             entity.update(dt, player.pos)
         else:
             entity.update(dt)
+
+        # remove bullets that have gone off screen
+        if isinstance(entity, Bullet):
+            print(len(entities))
+            if (entity.y - entity.radius < 0 or
+                entity.y + entity.radius > SS[1] or
+                entity.x - entity.radius < 0 or
+                entity.x + entity.radius > SS[0]):
+                entities.remove(entity)
 
         # just draw here for now
         if entity.shape is Shape.CIRCLE:

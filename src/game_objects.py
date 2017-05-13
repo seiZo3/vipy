@@ -5,7 +5,7 @@ import math
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
-
+YELLOW = (255, 255, 0)
 
 class Shape(Enum):
     CIRCLE = 1
@@ -144,7 +144,13 @@ class Player(Entity):
 
 class Bullet(Entity):
     """Represents a simple bullet"""
-    pass
+
+    def __init__(self, pos, max_speed):
+        Entity.__init__(self, pos[0], pos[1],
+                       radius=5,
+                       max_speed=max_speed,
+                       color=YELLOW,
+                       shape=Shape.CIRCLE)
 
 
 class Enemy(Entity):
